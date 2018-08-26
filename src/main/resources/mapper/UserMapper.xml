@@ -10,7 +10,7 @@
         <result column="isadmin" property="isAdmin" jdbcType="BOOLEAN"/>
     </resultMap>
     <sql id="Base_Column_List">
-        account,nick_name,isadmin
+        id,account,nick_name,isadmin
     </sql>
     <!--根据account查找用户-->
     <select id="findUserByAccount" resultMap="BaseResultMap">
@@ -27,5 +27,21 @@
         VALUES
         (#{account},#{nickName},#{pwd})
     </insert>
-
+    <!--根据account和pwd查找用户-->
+    <select id="findUserByAccountAndPwd" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM user
+        WHERE account=#{account}
+        AND pwd=#{pwd}
+    </select>
+    <!--生成token-->
+    <update id="updateUserByToken" parameterType="com.cj.task.entity.User">
+        UPDATE
+        user
+        SET
+        token=#{token}
+        WHERE
+        id=#{id}
+    </update>
 </mapper>

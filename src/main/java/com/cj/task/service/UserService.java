@@ -9,4 +9,5 @@ import org.springframework.stereotype.Service;
 @Service
 public interface UserService {
     Result registerUser(String account, String pwd, String nickName);
+    Result login(String account,String pwd);
 }

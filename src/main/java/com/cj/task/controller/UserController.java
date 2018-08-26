@@ -28,4 +28,9 @@ public class UserController {
         System.out.println("account " + account);
         return userService.registerUser(account, pwd, nickName);
     }
+
+    @PostMapping("/login")
+    public Result login(@RequestParam String account, @RequestParam String pwd) {
+        return userService.login(account, pwd);
+    }
 }
