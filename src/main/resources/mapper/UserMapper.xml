@@ -10,14 +10,14 @@
         <result column="isadmin" property="isAdmin" jdbcType="BOOLEAN"/>
     </resultMap>
     <sql id="Base_Column_List">
-        account, nick_name,isadmin
+        account,nick_name,isadmin
     </sql>
     <!--根据account查找用户-->
     <select id="findUserByAccount" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM user
-        WHERE id=#{id}
+        WHERE account=#{account}
     </select>
     <!--插入用户-->
     <insert id="save" parameterType="com.cj.task.entity.User">
