@@ -10,7 +10,7 @@
         <result column="isadmin" property="isAdmin" jdbcType="BOOLEAN"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id,account,nick_name,isadmin
+        id,account,nick_name,token,isadmin
     </sql>
     <!--根据account查找用户-->
     <select id="findUserByAccount" resultMap="BaseResultMap">
@@ -44,4 +44,11 @@
         WHERE
         id=#{id}
     </update>
+    <!--根据token获取用户信息-->
+    <select id="findUserByToken" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM user
+        WHERE token=#{token}
+    </select>
 </mapper>

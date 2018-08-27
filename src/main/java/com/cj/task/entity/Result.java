@@ -44,11 +44,11 @@ public class Result implements Serializable {
         return new Result(state, msg, data);
     }
 
-    public static Result getSuccess(int state,String msg, Object data) {
+    public static Result getSuccess(int state, String msg, Object data) {
         return getResult(state, msg, data);
     }
 
     public static Result getFail(int state, String msg) {
-        return getResult(state, msg,null);
+        return getResult(state, msg, null);
     }
 }

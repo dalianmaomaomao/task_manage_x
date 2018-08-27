@@ -29,8 +29,15 @@ public class UserController {
         return userService.registerUser(account, pwd, nickName);
     }
 
+    //用户登录
     @PostMapping("/login")
     public Result login(@RequestParam String account, @RequestParam String pwd) {
         return userService.login(account, pwd);
+    }
+
+    //根据token获取用户信息
+    @PostMapping("/token")
+    public Result findUserByToken(@RequestParam String token) {
+        return userService.findUserByToken(token);
     }
 }
