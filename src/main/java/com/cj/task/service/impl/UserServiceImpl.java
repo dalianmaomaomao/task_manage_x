@@ -72,13 +72,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public Result findUserByToken(String token) {
-        if (StringUtils.isEmpty(token)) {
-            return Result.getFail(HttpStatus.BAD_REQUEST.value(), "token为空");
-        }
         User user = userMapper.findUserByToken(token);
-        if (user == null) {
-            return Result.getFail(HttpStatus.NOT_FOUND.value(), "token不存在");
-        }
         return Result.getSuccess(HttpStatus.OK.value(), "获取用户详情成功", user);
     }
 
