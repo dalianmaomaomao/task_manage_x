@@ -1,15 +1,14 @@
 package com.cj.task.controller;
 
+import com.cj.task.annotation.TokenValid;
 import com.cj.task.entity.Result;
+import com.cj.task.entity.User;
 import com.cj.task.service.UserService;
-import com.cj.task.utils.RegexUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.regex.Pattern;
 
 /**
  * Created by cj on 2018/8/25.
@@ -34,10 +33,10 @@ public class UserController {
     }
 
     //获取用户信息
+    @TokenValid
     @GetMapping("userinfo")
-    public Result getUsers(HttpServletRequest request) {
-        String token = request.getHeader("token");
-        return userService.findUserByToken(token);
+    public Result getUsers(User user) {
+        return Result.getSuccess(HttpStatus.OK.value(), "获取用户信息成功", user);
     }
 }
 

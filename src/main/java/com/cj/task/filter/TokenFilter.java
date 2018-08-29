@@ -17,7 +17,7 @@ import java.io.IOException;
 /**
  * Created by cj on 2018/8/28.
  */
-@WebFilter(filterName = "TokenFilter", urlPatterns = {"/*"})
+//@WebFilter(filterName = "TokenFilter", urlPatterns = {"/*"})
 public class TokenFilter implements Filter {
     @Autowired
     UserService userService;
