@@ -9,6 +9,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -34,11 +35,18 @@ public class TokenAop {
         Object[] args = joinPoint.getArgs();
         String token = request.getHeader("token");
         if (StringUtils.isEmpty(token)) {
-            return Result.getFail(HttpStatus.BAD_REQUEST.value(), "token为空");
+            return ResponseEntity
+                    .badRequest()
+                    .body(new Result.ResultBuilder()
+                            .fail("token为空"));
+            //return Result.getFail(HttpStatus.BAD_REQUEST.value(), "token为空");
         }
         User user = userMapper.findUserByToken(token);
         if (user == null) {
-            return Result.getFail(HttpStatus.NOT_FOUND.value(), "该token不存在");
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new Result.ResultBuilder().fail(HttpStatus.NOT_FOUND.value(),"该token不存在"));
+            //return Result.getFail(HttpStatus.NOT_FOUND.value(), "该token不存在");
         }
         injectUserObject(args, user);
         return joinPoint.proceed(args);//传入的新的参数去执行目标方法

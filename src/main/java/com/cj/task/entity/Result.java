@@ -40,15 +40,55 @@ public class Result implements Serializable {
         this.data = data;
     }
 
-    public static Result getResult(int state, String msg, Object data) {
-        return new Result(state, msg, data);
-    }
+    public static class ResultBuilder {
+        private int state;
+        private String msg;
+        private Object data;
 
-    public static Result getSuccess(int state, String msg, Object data) {
-        return getResult(state, msg, data);
-    }
+        public int getState() {
+            return state;
+        }
 
-    public static Result getFail(int state, String msg) {
-        return getResult(state, msg, null);
+        public ResultBuilder setState(int state) {
+            this.state = state;
+            return this;
+        }
+
+        public String getMsg() {
+            return msg;
+        }
+
+        public ResultBuilder setMsg(String msg) {
+            this.msg = msg;
+            return this;
+        }
+
+        public Object getData() {
+            return data;
+        }
+
+        public ResultBuilder setData(Object data) {
+            this.data = data;
+            return this;
+        }
+        public Result success(String msg){
+            return setMsg(msg).setState(200).build();
+        }
+
+        public Result success(String msg, Object data) {
+            return setMsg(msg).setData(data).setState(200).build();
+        }
+
+        public Result fail(String msg) {
+            return setMsg(msg).setState(400).build();
+        }
+
+        public Result fail(int state,String msg) {
+            return setMsg(msg).setState(state).build();
+        }
+
+        public Result build() {
+            return new Result(state, msg, data);
+        }
     }
 }

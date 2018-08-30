@@ -6,6 +6,7 @@ import com.cj.task.entity.User;
 import com.cj.task.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,22 +22,25 @@ public class UserController {
 
     //用户注册
     @PostMapping("register")
-    public Result register(@RequestParam String account, @RequestParam String pwd, @RequestParam String nickName) {
+    public ResponseEntity register(@RequestParam String account, @RequestParam String pwd, @RequestParam String nickName) {
         System.out.println("account " + account);
-        return userService.registerUser(account, pwd, nickName);
+        Result result = userService.registerUser(account, pwd, nickName);
+        return ResponseEntity.ok(result);
     }
 
     //用户登录
     @PostMapping("login")
-    public Result login(@RequestParam String account, @RequestParam String pwd) {
-        return userService.login(account, pwd);
+    public ResponseEntity login(@RequestParam String account, @RequestParam String pwd) {
+        Result result = userService.login(account, pwd);
+        return ResponseEntity.ok(result);
     }
 
     //获取用户信息
     @TokenValid
     @GetMapping("userinfo")
-    public Result getUsers(User user) {
-        return Result.getSuccess(HttpStatus.OK.value(), "获取用户信息成功", user);
+    public ResponseEntity getUsers(User user) {
+        return ResponseEntity.ok(new Result.ResultBuilder().setState(HttpStatus.OK.value()).setMsg("获取用户信息成功").setData(user).build());
+        //return Result.getSuccess(HttpStatus.OK.value(), "获取用户信息成功", user);
     }
 }
 

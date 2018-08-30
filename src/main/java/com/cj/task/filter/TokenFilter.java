@@ -6,6 +6,7 @@ import com.cj.task.service.UserService;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.*;
@@ -46,8 +47,7 @@ public class TokenFilter implements Filter {
             }
             System.out.println("从head获取token " + token);
             Result result = userService.findUserByToken(token);
-            Object user = result.getData();
-            if (user == null) {
+            if (result.getData() == null) {
                 response.getWriter().println("{\"status\":401,\"msg\":\"token校验失败！\",\"data\":null}");
             } else {
                 filterChain.doFilter(servletRequest, servletResponse);
