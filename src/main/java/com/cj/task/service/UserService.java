@@ -1,6 +1,7 @@
 package com.cj.task.service;
 
 import com.cj.task.entity.Result;
+import com.cj.task.entity.User;
 import org.springframework.stereotype.Service;
 
 /**
@@ -14,5 +15,7 @@ public interface UserService {
 
     Result findUserByToken(String token);
 
-    Result updateUserinfo(String nickName,int id);
+    Result updateUserinfo(String nickName, User user);
+
+    Result updatePwd(String oldPwd, String newPwd, User user);
 }

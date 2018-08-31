@@ -2,6 +2,7 @@ package com.cj.task.service.impl;
 
 import com.cj.task.entity.Result;
 import com.cj.task.entity.User;
+import com.cj.task.entity.response.UserResponse;
 import com.cj.task.mapper.UserMapper;
 import com.cj.task.service.UserService;
 import com.cj.task.utils.RegexUtils;
@@ -40,7 +41,7 @@ public class UserServiceImpl implements UserService {
             return new Result.ResultBuilder().fail("您输入的密码不符合规范");
             //return Result.getFail(HttpStatus.BAD_REQUEST.value(), "您输入的密码不符合规范");
         }
-        if (nickName.length() < 8) {
+        if (nickName.length() > 8) {
             return new Result.ResultBuilder().fail("您输入的昵称长度不符合规范");
         }
         User userByAccount = userMapper.findUserByAccount(account);
@@ -53,8 +54,7 @@ public class UserServiceImpl implements UserService {
         user.setPwd(pwd);
         user.setNickName(nickName);
         userMapper.save(user);
-        return new Result.ResultBuilder().success("注册成功");
-        //return Result.getSuccess(HttpStatus.OK.value(), "注册成功", LoginResponse.wrap(user));
+        return new Result.ResultBuilder().success("注册成功", UserResponse.wrap(user));
     }
 
     public Result login(String account, String pwd) {
@@ -77,25 +77,40 @@ public class UserServiceImpl implements UserService {
         String token = TokenUtils.getToken(account);
         user.setToken(token);
         userMapper.updateUserByToken(user);
-        return new Result.ResultBuilder().success("登录成功", user);
-        //return Result.getSuccess(HttpStatus.OK.value(), "登录成功", LoginResponse.wrap(user));
+        return new Result.ResultBuilder().success("登录成功", UserResponse.wrap(user));
     }
 
     public Result findUserByToken(String token) {
         User user = userMapper.findUserByToken(token);
-        return new Result.ResultBuilder().success("根据token在查找用户成功", user);
+        return new Result.ResultBuilder().success("根据token在查找用户成功", UserResponse.wrap(user));
     }
 
-    public Result updateUserinfo(String nickName, int id) {
+    public Result updateUserinfo(String nickName, User user) {
         if (StringUtils.isEmpty(nickName)) {
             return new Result.ResultBuilder().fail("新昵称为空");
         }
-        if (nickName.length() < 8) {
+        if (nickName.length() > 8) {
             return new Result.ResultBuilder().fail("新昵称长度不符合规范");
         }
-        userMapper.updateUserinfo(nickName, id);
-        return new Result.ResultBuilder().success("修改用户信息成功");
+        System.out.println("user.getID" + user.getId());
+        userMapper.updateUserinfo(nickName, user.getId());
+        return new Result.ResultBuilder().success("修改用户信息成功", UserResponse.wrap(user));
     }
 
-
+    public Result updatePwd(String oldPwd, String newPwd, User user) {
+        if (StringUtils.isEmpty(oldPwd)) {
+            return new Result.ResultBuilder().fail("您输入的旧密码为空");
+        }
+        if (StringUtils.isEmpty(newPwd)) {
+            return new Result.ResultBuilder().fail("您输入的新密码为空");
+        }
+        if (!RegexUtils.isPwd(newPwd)) {
+            return new Result.ResultBuilder().fail("您输入的新密码不符合规范");
+        }
+        if (!oldPwd.equals(user.getPwd())) {
+            return new Result.ResultBuilder().fail("您输入的旧密码错误");
+        }
+        userMapper.updatePwd(newPwd, user.getId());
+        return new Result.ResultBuilder().success("修改用户密码成功", UserResponse.wrap(user));
+    }
 }

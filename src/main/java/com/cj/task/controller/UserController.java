@@ -44,8 +44,16 @@ public class UserController {
     //修改个人信息
     @TokenValid
     @PutMapping("updateUserinfo")
-    public ResponseEntity updateUserinfo(@RequestParam String nickName, @RequestParam int id) {
-        Result result = userService.updateUserinfo(nickName, id);
+    public ResponseEntity updateUserinfo(@RequestParam String nickName, User user) {
+        Result result = userService.updateUserinfo(nickName, user);
+        return ResponseEntity.ok(result);
+    }
+
+    //修改密码
+    @TokenValid
+    @PutMapping("updatePwd")
+    public ResponseEntity updatePwd(@RequestParam String oldPwd, @RequestParam String newPwd, User user) {
+        Result result = userService.updatePwd(oldPwd, newPwd, user);
         return ResponseEntity.ok(result);
     }
 

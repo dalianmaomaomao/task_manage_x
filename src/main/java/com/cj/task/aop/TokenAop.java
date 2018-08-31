@@ -44,7 +44,7 @@ public class TokenAop {
         if (user == null) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
-                    .body(new Result.ResultBuilder().fail(HttpStatus.NOT_FOUND.value(),"该token不存在"));
+                    .body(new Result.ResultBuilder().fail(HttpStatus.NOT_FOUND.value(), "该token不存在"));
             //return Result.getFail(HttpStatus.NOT_FOUND.value(), "该token不存在");
         }
         injectUserObject(args, user);

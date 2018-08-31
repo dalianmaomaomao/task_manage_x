@@ -19,6 +19,8 @@ public interface UserMapper {
 
     User findUserByToken(String token);
 
-    int updateUserinfo(@Param("nickName")String nickName,@Param("id")int id);
+    int updateUserinfo(@Param("nickName") String nickName, @Param("id") int id);
+
+    int updatePwd(@Param("pwd") String pwd, @Param("id") int id);
 
 }
