@@ -51,4 +51,13 @@
         FROM user
         WHERE token=#{token}
     </select>
+    <!--修改个人信息-->
+    <update id="updateUserinfo" parameterType="com.cj.task.entity.User">
+        UPDATE
+        user
+        SET
+        nick_name=#{nickName}
+        WHERE
+        id=#{id}
+    </update>
 </mapper>

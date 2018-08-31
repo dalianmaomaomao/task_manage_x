@@ -37,8 +37,7 @@ public class TokenAop {
         if (StringUtils.isEmpty(token)) {
             return ResponseEntity
                     .badRequest()
-                    .body(new Result.ResultBuilder()
-                            .fail("token为空"));
+                    .body(new Result.ResultBuilder().fail("token为空"));
             //return Result.getFail(HttpStatus.BAD_REQUEST.value(), "token为空");
         }
         User user = userMapper.findUserByToken(token);

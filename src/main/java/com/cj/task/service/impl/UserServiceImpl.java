@@ -40,6 +40,9 @@ public class UserServiceImpl implements UserService {
             return new Result.ResultBuilder().fail("您输入的密码不符合规范");
             //return Result.getFail(HttpStatus.BAD_REQUEST.value(), "您输入的密码不符合规范");
         }
+        if (nickName.length() < 8) {
+            return new Result.ResultBuilder().fail("您输入的昵称长度不符合规范");
+        }
         User userByAccount = userMapper.findUserByAccount(account);
         if (null != userByAccount) {
             return new Result.ResultBuilder().fail("您输入的用户名已存在");
@@ -68,7 +71,7 @@ public class UserServiceImpl implements UserService {
 //        map.put("pwd",account);
         User user = userMapper.findUserByAccountAndPwd(account, pwd);
         if (null == user) {
-            return new Result.ResultBuilder().fail( "用户名或密码错误");
+            return new Result.ResultBuilder().fail("用户名或密码错误");
             //Result.getFail(HttpStatus.BAD_REQUEST.value(), "用户或密码错误");
         }
         String token = TokenUtils.getToken(account);
@@ -82,5 +85,17 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.findUserByToken(token);
         return new Result.ResultBuilder().success("根据token在查找用户成功", user);
     }
+
+    public Result updateUserinfo(String nickName, int id) {
+        if (StringUtils.isEmpty(nickName)) {
+            return new Result.ResultBuilder().fail("新昵称为空");
+        }
+        if (nickName.length() < 8) {
+            return new Result.ResultBuilder().fail("新昵称长度不符合规范");
+        }
+        userMapper.updateUserinfo(nickName, id);
+        return new Result.ResultBuilder().success("修改用户信息成功");
+    }
+
 
 }

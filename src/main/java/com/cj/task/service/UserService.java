@@ -13,4 +13,6 @@ public interface UserService {
     Result login(String account, String pwd);
 
     Result findUserByToken(String token);
+
+    Result updateUserinfo(String nickName,int id);
 }

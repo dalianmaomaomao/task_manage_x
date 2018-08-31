@@ -5,11 +5,9 @@ import com.cj.task.entity.Result;
 import com.cj.task.entity.User;
 import com.cj.task.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created by cj on 2018/8/25.
@@ -39,8 +37,17 @@ public class UserController {
     @TokenValid
     @GetMapping("userinfo")
     public ResponseEntity getUsers(User user) {
-        return ResponseEntity.ok(new Result.ResultBuilder().setState(HttpStatus.OK.value()).setMsg("获取用户信息成功").setData(user).build());
+        return ResponseEntity.ok(new Result.ResultBuilder().success("获取用户信息成功", user));
         //return Result.getSuccess(HttpStatus.OK.value(), "获取用户信息成功", user);
     }
+
+    //修改个人信息
+    @TokenValid
+    @PutMapping("updateUserinfo")
+    public ResponseEntity updateUserinfo(@RequestParam String nickName, @RequestParam int id) {
+        Result result = userService.updateUserinfo(nickName, id);
+        return ResponseEntity.ok(result);
+    }
+
 }
 
