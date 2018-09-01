@@ -12,6 +12,9 @@
     <sql id="Base_Column_List">
         id,account,pwd,nick_name,token,isadmin
     </sql>
+    <sql id="Base_Column_UserList">
+        id,account,nick_name,isadmin
+    </sql>
     <!--根据account查找用户-->
     <select id="findUserByAccount" resultMap="BaseResultMap">
         SELECT
@@ -69,4 +72,17 @@
         WHERE
         id=#{id}
     </update>
+    <!--查看用户列表-->
+    <select id="userList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_UserList"/>
+        FROM user
+    </select>
+    <!--根据ID获取用户信息-->
+    <select id="findUserById" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM user
+        WHERE id=#{id}
+    </select>
 </mapper>

@@ -1,10 +1,12 @@
 package com.cj.task.controller;
 
+import com.cj.task.annotation.AdminValid;
 import com.cj.task.annotation.TokenValid;
 import com.cj.task.entity.Result;
 import com.cj.task.entity.User;
 import com.cj.task.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,10 +37,16 @@ public class UserController {
 
     //获取用户信息
     @TokenValid
-    @GetMapping("userinfo")
-    public ResponseEntity getUsers(User user) {
-        return ResponseEntity.ok(new Result.ResultBuilder().success("获取用户信息成功", user));
-        //return Result.getSuccess(HttpStatus.OK.value(), "获取用户信息成功", user);
+    @GetMapping("user/id")
+    public ResponseEntity getUsers(@RequestParam int id, User user) {
+        if (!user.isAdmin()) {
+            if (id == user.getId()) {
+                return ResponseEntity.ok(new Result.ResultBuilder().success("获取用户信息成功", user));
+            }
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new Result.ResultBuilder().fail(HttpStatus.FORBIDDEN.value(), "该用户无权限"));
+        }
+        Result result = userService.findUserById(id);
+        return ResponseEntity.ok(result);
     }
 
     //修改个人信息
@@ -54,6 +62,14 @@ public class UserController {
     @PutMapping("updatePwd")
     public ResponseEntity updatePwd(@RequestParam String oldPwd, @RequestParam String newPwd, User user) {
         Result result = userService.updatePwd(oldPwd, newPwd, user);
+        return ResponseEntity.ok(result);
+    }
+
+    //查看所有用户列表
+    @AdminValid
+    @GetMapping("userList")
+    public ResponseEntity userList() {
+        Result result = userService.userList();
         return ResponseEntity.ok(result);
     }
 

@@ -3,7 +3,7 @@ package com.cj.task.mapper;
 import com.cj.task.entity.User;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.Map;
+import java.util.List;
 
 /**
  * Created by cj on 2018/8/26.
@@ -23,4 +23,7 @@ public interface UserMapper {
 
     int updatePwd(@Param("pwd") String pwd, @Param("id") int id);
 
+    List<User> userList();
+
+    User findUserById(int id);
 }

@@ -2,14 +2,19 @@ package com.cj.task.service.impl;
 
 import com.cj.task.entity.Result;
 import com.cj.task.entity.User;
+import com.cj.task.entity.response.UserDetailResponse;
+import com.cj.task.entity.response.UserListResponse;
 import com.cj.task.entity.response.UserResponse;
 import com.cj.task.mapper.UserMapper;
 import com.cj.task.service.UserService;
 import com.cj.task.utils.RegexUtils;
 import com.cj.task.utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+
+import java.util.List;
 
 
 /**
@@ -112,5 +117,18 @@ public class UserServiceImpl implements UserService {
         }
         userMapper.updatePwd(newPwd, user.getId());
         return new Result.ResultBuilder().success("修改用户密码成功", UserResponse.wrap(user));
+    }
+
+    public Result userList() {
+        List<User> userList = userMapper.userList();
+        return new Result.ResultBuilder().success("获取用户列表成功", userList);
+    }
+
+    public Result findUserById(int id) {
+        User user = userMapper.findUserById(id);
+        if (user == null) {
+            return new Result.ResultBuilder().fail(HttpStatus.NOT_FOUND.value(), "无该用户");
+        }
+        return new Result.ResultBuilder().success("获取该用户信息成功", UserDetailResponse.wrap(user));
     }
 }

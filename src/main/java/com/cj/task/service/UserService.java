@@ -18,4 +18,8 @@ public interface UserService {
     Result updateUserinfo(String nickName, User user);
 
     Result updatePwd(String oldPwd, String newPwd, User user);
+
+    Result userList();
+
+    Result findUserById(int id);
 }
