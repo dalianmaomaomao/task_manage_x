@@ -68,8 +68,9 @@ public class UserController {
     //查看所有用户列表
     @AdminValid
     @GetMapping("userList")
-    public ResponseEntity userList() {
-        Result result = userService.userList();
+    public ResponseEntity userList(@RequestParam int page,@RequestParam int pageSize) {
+        System.out.println("page:"+page+"pageSize:"+pageSize);
+        Result result = userService.userList(page,pageSize);
         return ResponseEntity.ok(result);
     }
 

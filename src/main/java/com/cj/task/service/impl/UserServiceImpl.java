@@ -9,6 +9,8 @@ import com.cj.task.mapper.UserMapper;
 import com.cj.task.service.UserService;
 import com.cj.task.utils.RegexUtils;
 import com.cj.task.utils.TokenUtils;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -119,7 +121,8 @@ public class UserServiceImpl implements UserService {
         return new Result.ResultBuilder().success("修改用户密码成功", UserResponse.wrap(user));
     }
 
-    public Result userList() {
+    public Result userList(int page, int pageSize) {
+        PageHelper.startPage(page, pageSize);
         List<User> userList = userMapper.userList();
         return new Result.ResultBuilder().success("获取用户列表成功", userList);
     }
