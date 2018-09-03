@@ -92,16 +92,16 @@ public class UserServiceImpl implements UserService {
         return new Result.ResultBuilder().success("根据token在查找用户成功", UserResponse.wrap(user));
     }
 
-    public Result updateUserinfo(String nickName, User user) {
+    public Result updateUserinfo(String nickName, int id) {
         if (StringUtils.isEmpty(nickName)) {
             return new Result.ResultBuilder().fail("新昵称为空");
         }
         if (nickName.length() > 8) {
             return new Result.ResultBuilder().fail("新昵称长度不符合规范");
         }
-        System.out.println("user.getID" + user.getId());
-        userMapper.updateUserinfo(nickName, user.getId());
-        return new Result.ResultBuilder().success("修改用户信息成功", UserResponse.wrap(user));
+        System.out.println("user.getID" + id);
+        userMapper.updateUserinfo(nickName, id);
+        return new Result.ResultBuilder().success("修改用户信息成功");
     }
 
     public Result updatePwd(String oldPwd, String newPwd, User user) {

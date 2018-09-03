@@ -15,7 +15,7 @@ public interface UserService {
 
     Result findUserByToken(String token);
 
-    Result updateUserinfo(String nickName, User user);
+    Result updateUserinfo(String nickName, int id);
 
     Result updatePwd(String oldPwd, String newPwd, User user);
 

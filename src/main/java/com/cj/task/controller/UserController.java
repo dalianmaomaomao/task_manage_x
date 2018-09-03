@@ -52,9 +52,21 @@ public class UserController {
     //修改个人信息
     @TokenValid
     @PutMapping("user/{id}")
-    public ResponseEntity updateUserinfo(@RequestParam String nickName, User user) {
-        Result result = userService.updateUserinfo(nickName, user);
-        return ResponseEntity.ok(result);
+    public ResponseEntity updateUserinfo(@PathVariable int id, @RequestParam String nickName, User user) {
+        boolean succ = false;
+        if (!user.isAdmin()) {
+            if (id == user.getId()) {
+                succ = true;
+            }
+        } else {
+            succ = true;
+        }
+        if (succ) {
+            Result result = userService.updateUserinfo(nickName, id);
+            return ResponseEntity.ok(result);
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new Result.ResultBuilder().fail(HttpStatus.FORBIDDEN.value(), "该用户无权限"));
+        }
     }
 
     //修改密码
