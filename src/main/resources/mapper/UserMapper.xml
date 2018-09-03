@@ -85,4 +85,9 @@
         FROM user
         WHERE id=#{id}
     </select>
+    <!--根据ID删除用户-->
+    <delete id="delete" parameterType="com.cj.task.entity.User" >
+        delete from user
+        where id = #{id}
+    </delete>
 </mapper>

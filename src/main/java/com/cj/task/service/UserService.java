@@ -19,7 +19,9 @@ public interface UserService {
 
     Result updatePwd(String oldPwd, String newPwd, User user);
 
-    Result userList(int page,int pageSize);
+    Result userList(int page, int pageSize);
 
     Result findUserById(int id);
+
+    Result deleteUser(int id);
 }

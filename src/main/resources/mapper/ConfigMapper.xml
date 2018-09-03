@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.task.mapper.ConfigMapper">
+    <resultMap id="BaseResultMap" type="com.cj.task.entity.Config">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="expression" property="expression" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,name,description,expression
+    </sql>
+    <!--插入规则-->
+    <insert id="save" parameterType="com.cj.task.entity.Config">
+        INSERT INTO
+        config
+        (name,description,expression)
+        VALUES
+        (#{name},#{description},#{expression})
+    </insert>
+    <!--获取规则列表-->
+    <select id="configList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM config
+    </select>
+    <!--根据ID获取规则详情-->
+    <select id="getConfigInfoById" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM config
+        WHERE id=#{id}
+    </select>
+    <!--修改规则-->
+    <update id="updateConfig" parameterType="com.cj.task.entity.Config">
+        UPDATE
+        config
+        SET name=#{name},
+        description=#{description},
+        expression=#{expression}
+        WHERE id=#{id}
+    </update>
+    <!--根据ID删除规则-->
+    <delete id="delete" parameterType="com.cj.task.entity.Config">
+        delete from config
+        where id =#{id}
+    </delete>
+</mapper>

@@ -26,4 +26,6 @@ public interface UserMapper {
     List<User> userList();
 
     User findUserById(int id);
+
+    int delete(int id);
 }

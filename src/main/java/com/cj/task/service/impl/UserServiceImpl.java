@@ -134,4 +134,9 @@ public class UserServiceImpl implements UserService {
         }
         return new Result.ResultBuilder().success("获取该用户信息成功", UserDetailResponse.wrap(user));
     }
+
+    public Result deleteUser(int id) {
+        userMapper.delete(id);
+        return new Result.ResultBuilder().success("删除用户成功");
+    }
 }

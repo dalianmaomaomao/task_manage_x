@@ -37,8 +37,8 @@ public class UserController {
 
     //获取用户信息
     @TokenValid
-    @GetMapping("user/id")
-    public ResponseEntity getUsers(@RequestParam int id, User user) {
+    @GetMapping("user/{id}")
+    public ResponseEntity getUsers(@PathVariable int id, User user) {
         if (!user.isAdmin()) {
             if (id == user.getId()) {
                 return ResponseEntity.ok(new Result.ResultBuilder().success("获取用户信息成功", user));
@@ -68,11 +68,19 @@ public class UserController {
     //查看所有用户列表
     @AdminValid
     @GetMapping("userList")
-    public ResponseEntity userList(@RequestParam int page,@RequestParam int pageSize) {
-        System.out.println("page:"+page+"pageSize:"+pageSize);
-        Result result = userService.userList(page,pageSize);
+    public ResponseEntity userList(@RequestParam int page, @RequestParam int pageSize) {
+        Result result = userService.userList(page, pageSize);
         return ResponseEntity.ok(result);
     }
+
+    //删除用户
+    @AdminValid
+    @DeleteMapping("deleteUser/{id}")
+    public ResponseEntity deleteUser(@PathVariable int id) {
+        Result result = userService.deleteUser(id);
+        return ResponseEntity.ok(result);
+    }
+
 
 }
 
