@@ -51,7 +51,7 @@ public class UserController {
 
     //修改个人信息
     @TokenValid
-    @PutMapping("updateUserinfo")
+    @PutMapping("user/{id}")
     public ResponseEntity updateUserinfo(@RequestParam String nickName, User user) {
         Result result = userService.updateUserinfo(nickName, user);
         return ResponseEntity.ok(result);
@@ -59,7 +59,7 @@ public class UserController {
 
     //修改密码
     @TokenValid
-    @PutMapping("updatePwd")
+    @PutMapping("user/{id}/pwd")
     public ResponseEntity updatePwd(@RequestParam String oldPwd, @RequestParam String newPwd, User user) {
         Result result = userService.updatePwd(oldPwd, newPwd, user);
         return ResponseEntity.ok(result);
@@ -67,7 +67,7 @@ public class UserController {
 
     //查看所有用户列表
     @AdminValid
-    @GetMapping("userList")
+    @GetMapping("users")
     public ResponseEntity userList(@RequestParam int page, @RequestParam int pageSize) {
         Result result = userService.userList(page, pageSize);
         return ResponseEntity.ok(result);
@@ -75,7 +75,7 @@ public class UserController {
 
     //删除用户
     @AdminValid
-    @DeleteMapping("deleteUser/{id}")
+    @DeleteMapping("user/{id}")
     public ResponseEntity deleteUser(@PathVariable int id) {
         Result result = userService.deleteUser(id);
         return ResponseEntity.ok(result);

@@ -19,7 +19,7 @@ public class ConfigController {
 
     //新增表单字段规则
     @AdminValid
-    @PostMapping("createConfig")
+    @PostMapping("config")
     public ResponseEntity createConfig(@RequestParam String name, @RequestParam String description, @RequestParam String expression) {
         Result result = configService.createConfig(name, description, expression);
         return ResponseEntity.ok(result);
@@ -27,7 +27,7 @@ public class ConfigController {
 
     //查看规则列表
     @TokenValid
-    @GetMapping("configList")
+    @GetMapping("configs")
     public ResponseEntity configList(@RequestParam int page, @RequestParam int pageSize) {
         Result result = configService.configList(page, pageSize);
         return ResponseEntity.ok(result);
@@ -43,7 +43,7 @@ public class ConfigController {
 
     //修改规则
     @AdminValid
-    @PutMapping("updateConfig/{id}")
+    @PutMapping("config/{id}")
     public ResponseEntity updateConfig(@PathVariable int id, @RequestParam String name, @RequestParam String description, @RequestParam String expression) {
         Result result = configService.updateConfig(name, description, expression, id);
         return ResponseEntity.ok(result);
@@ -51,7 +51,7 @@ public class ConfigController {
 
     //删除规则
     @AdminValid
-    @DeleteMapping("deleteConfig/{id}")
+    @DeleteMapping("config/{id}")
     public ResponseEntity deleteConfig(@PathVariable int id) {
         Result result = configService.deleteConfig(id);
         return ResponseEntity.ok(result);
