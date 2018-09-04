@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.task.mapper.TaskMapper">
+    <resultMap id="BaseResultMap" type="com.cj.task.entity.Task">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="publish_time" property="publishTime" jdbcType="TIMESTAMP"/>
+        <result column="deadline" property="deadline" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,title,description,publish_time,deadline
+    </sql>
+    <!--插入表单-->
+    <insert id="save" parameterType="com.cj.task.entity.Task">
+        INSERT INTO
+        task
+        (title,description,publish_time,deadline)
+        VALUES
+        (#{title},#{description},#{publishTime},#{deadline})
+    </insert>
+    <!--获取表单列表-->
+    <select id="getTasks" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM task
+    </select>
+    <!--获取表单详情-->
+    <select id="taskInfo" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM task
+        WHERE id=#{id}
+    </select>
+    <!--修改表单-->
+    <update id="updateTask" parameterType="Map">
+        UPDATE
+        task
+        SET title=#{title},
+        description=#{description},
+        publish_time=#{publishTime},
+        deadline=#{deadline}
+        WHERE id=#{id}
+    </update>
+    <!--删除表单-->
+    <delete id="delete" parameterType="com.cj.task.entity.Task">
+        DELETE FROM task
+        WHERE id=#{id}
+    </delete>
+</mapper>
