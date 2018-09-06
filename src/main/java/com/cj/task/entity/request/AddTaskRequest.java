@@ -12,6 +12,8 @@ public class AddTaskRequest {
     private String description;
     private Date publishTime;
     private Date deadline;
+    private int[] users;
+    private AddFieldRequest[] fields;
 
     public Task toTask() {
         Task task = new Task();
@@ -52,5 +54,21 @@ public class AddTaskRequest {
 
     public void setDeadline(Date deadline) {
         this.deadline = deadline;
+    }
+
+    public int[] getUsers() {
+        return users;
+    }
+
+    public void setUsers(int[] users) {
+        this.users = users;
+    }
+
+    public AddFieldRequest[] getFields() {
+        return fields;
+    }
+
+    public void setFields(AddFieldRequest[] fields) {
+        this.fields = fields;
     }
 }

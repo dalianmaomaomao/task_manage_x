@@ -4,6 +4,7 @@ import com.cj.task.entity.User;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by cj on 2018/8/26.
@@ -28,4 +29,6 @@ public interface UserMapper {
     User findUserById(int id);
 
     int delete(int id);
+
+    User findAllWithLikeTask(int userID);
 }

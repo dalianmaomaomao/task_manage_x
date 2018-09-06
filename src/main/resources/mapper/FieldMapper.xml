@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.task.mapper.FieldMapper">
+    <resultMap id="BaseResultMap" type="com.cj.task.entity.Field">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <association column="task_id" property="task" javaType="com.cj.task.entity.Task"/>
+        <association column="config_id" property="config" javaType="com.cj.task.entity.Config"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,name,description,task_id,config_id
+    </sql>
+    <!--插入字段-->
+    <insert id="save" parameterType="com.cj.task.entity.Field">
+        INSERT INTO
+        field
+        (name,description,task_id,config_id)
+        VALUES
+        (#{name},#{description},#{task.id},#{config.id})
+    </insert>
+    <!--根据task id查找相应的字段-->
+    <select id="findFieldByTaskId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM field
+        WHERE task_id=#{taskID}
+    </select>
+    <!--根据ID删除字段-->
+    <delete id="delete" parameterType="com.cj.task.entity.Field">
+        delete from field
+        where id = #{id}
+    </delete>
+    <!--修改字段-->
+    <update id="updateFieldById" parameterType="com.cj.task.entity.Field">
+        UPDATE
+        field
+        SET name=#{field.name},
+        description=#{field.description}
+        WHERE id=#{id}
+    </update>
+</mapper>

@@ -9,3 +9,6 @@ spring:
 mybatis:
  type-aliases-package: com.cj.task.entity
  mapper-locations: classpath:mapper/*.xml
+ configuration:
+   log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+

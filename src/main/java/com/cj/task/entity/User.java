@@ -1,8 +1,12 @@
 package com.cj.task.entity;
 
+import java.util.List;
+import java.util.Set;
+
 /**
  * Created by cj on 2018/8/25.
  */
+
 public class User {
     private int id;
     private String account;
@@ -10,6 +14,7 @@ public class User {
     private String nickName;
     private String token;
     private boolean isAdmin;
+    private Set<Task> likeTasks;
 
     public int getId() {
         return id;
@@ -57,5 +62,13 @@ public class User {
 
     public void setAdmin(boolean admin) {
         isAdmin = admin;
+    }
+
+    public Set<Task> getLikeTasks() {
+        return likeTasks;
+    }
+
+    public void setLikeTasks(Set<Task> likeTasks) {
+        this.likeTasks = likeTasks;
     }
 }

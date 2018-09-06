@@ -1,6 +1,7 @@
 package com.cj.task.service;
 
 import com.cj.task.entity.Result;
+import com.cj.task.entity.User;
 import com.cj.task.entity.request.AddTaskRequest;
 import org.springframework.stereotype.Service;
 
@@ -18,4 +19,10 @@ public interface TaskService {
     Result updateTask(int id, AddTaskRequest taskRequest);
 
     Result deleteTask(int id);
+
+    Result addLikeTask(int id, User user);
+
+    Result deleteLikeTask(int id, User user);
+
+    Result getAllLikeTasks(User user);
 }

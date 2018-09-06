@@ -9,6 +9,19 @@
         <result column="token" property="token" jdbcType="VARCHAR"/>
         <result column="isadmin" property="isAdmin" jdbcType="BOOLEAN"/>
     </resultMap>
+    <resultMap id="userLikeTaskMap" type="com.cj.task.entity.Task"
+               extends="BaseResultMap">
+        <collection property="likeTasks" ofType="com.cj.task.entity.Task">
+            <id column="task_id" property="id" jdbcType="INTEGER"/>
+            <result column="task_title" property="title" jdbcType="VARCHAR"/>
+            <result column="task_description" property="description" jdbcType="VARCHAR"/>
+            <result column="task_publish_time" property="publishTime" jdbcType="TIMESTAMP"/>
+            <result column="task_deadline" property="deadline" jdbcType="TIMESTAMP"/>
+        </collection>
+    </resultMap>
+    <!--<resultMap id="userLikeTasks" type="com.cj.task.entity.User" extends="BaseResultMap">-->
+        <!---->
+    <!--</resultMap>-->
     <sql id="Base_Column_List">
         id,account,pwd,nick_name,token,isadmin
     </sql>
@@ -78,16 +91,27 @@
         <include refid="Base_Column_UserList"/>
         FROM user
     </select>
-    <!--根据ID获取用户信息-->
+    <!--根据用户ID获取用户信息-->
     <select id="findUserById" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM user
         WHERE id=#{id}
     </select>
-    <!--根据ID删除用户-->
+    <!--根据用户ID删除用户-->
     <delete id="delete" parameterType="com.cj.task.entity.User" >
         delete from user
         where id = #{id}
     </delete>
+    <!--查询用户所收藏的表-->
+    <select id="findAllWithLikeTask" resultMap="userLikeTaskMap">
+        SELECT u.id,u.account,u.pwd,u.nick_name,u.token,u.isadmin,
+        t.id as task_id,t.title as task_title,t.description as task_description,
+        t.publish_time as task_publish_time,t.deadline as task_deadline
+        FROM user u LEFT JOIN  user_like_tasks ut
+        on u.id=ut.like_users_id
+        LEFT JOIN task t
+        ON t.id=ut.like_tasks_id
+        WHERE u.id=#{userID}
+    </select>
 </mapper>

@@ -7,12 +7,33 @@
         <result column="description" property="description" jdbcType="VARCHAR"/>
         <result column="publish_time" property="publishTime" jdbcType="TIMESTAMP"/>
         <result column="deadline" property="deadline" jdbcType="TIMESTAMP"/>
+        <collection property="users" ofType="com.cj.task.entity.User"/>
+        <collection property="fields" ofType="com.cj.task.entity.Field"/>
+    </resultMap>
+    <resultMap id="taskWithFieldsMap" type="com.cj.task.entity.Task"
+               extends="BaseResultMap">
+        <collection property="fields" ofType="com.cj.task.entity.Field">
+            <id column="field_id" property="id" jdbcType="INTEGER"/>
+            <result column="field_name" property="name" jdbcType="VARCHAR"/>
+            <result column="field_description" property="description" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
+    <resultMap id="taskWithFieldsUsersMap" type="com.cj.task.entity.Task"
+               extends="taskWithFieldsMap">
+        <collection property="users" ofType="com.cj.task.entity.User">
+            <id column="user_id" property="id" jdbcType="INTEGER"/>
+            <result column="user_account" property="account" jdbcType="VARCHAR"/>
+            <result column="user_pwd" property="pwd" jdbcType="VARCHAR"/>
+            <result column="user_nick_name" property="nickName" jdbcType="VARCHAR"/>
+            <result column="user_token" property="token" jdbcType="VARCHAR"/>
+            <result column="user_isadmin" property="isAdmin" jdbcType="VARCHAR"/>
+        </collection>
     </resultMap>
     <sql id="Base_Column_List">
-        id,title,description,publish_time,deadline
-    </sql>
+            id,title,description,publish_time,deadline
+        </sql>
     <!--插入表单-->
-    <insert id="save" parameterType="com.cj.task.entity.Task">
+    <insert id="save" parameterType="com.cj.task.entity.Task" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO
         task
         (title,description,publish_time,deadline)
@@ -26,11 +47,17 @@
         FROM task
     </select>
     <!--获取表单详情-->
-    <select id="taskInfo" resultMap="BaseResultMap">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM task
-        WHERE id=#{id}
+    <select id="taskInfo" resultMap="taskWithFieldsUsersMap">
+        SELECT t.id,t.title,t.description,t.publish_time,t.deadline,
+        u.id AS user_id,u.account AS user_account,u.nick_name AS user_nick_name,u.isadmin AS user_isadmin,
+        f.id AS field_id,f.name AS field_name,f.description AS field_description
+        FROM task t LEFT JOIN task_users tu
+        ON t.id=tu.task_id
+        LEFT JOIN user u
+        ON u.id=tu.user_id
+        LEFT JOIN field f
+        ON t.id=f.task_id
+        WHERE t.id=#{id}
     </select>
     <!--修改表单-->
     <update id="updateTask" parameterType="Map">
@@ -46,5 +73,32 @@
     <delete id="delete" parameterType="com.cj.task.entity.Task">
         DELETE FROM task
         WHERE id=#{id}
+    </delete>
+    <!--批量插入-->
+    <insert id="insertTaskUsers">
+        INSERT INTO task_users
+        (task_id,user_id)
+        VALUES
+        <foreach collection="param2" item="id" separator=",">
+            (#{taskID}, #{id})
+        </foreach>
+    </insert>
+    <!--插入用户收藏表单表-->
+    <insert id="insertTaskLikes">
+        INSERT INTO user_like_tasks
+        (like_users_id,like_tasks_id)
+        VALUES
+        (#{userID}, #{taskID})
+     </insert>
+    <!--取消收藏-->
+    <delete id="deleteTaskLikes">
+        DELETE FROM user_like_tasks
+        WHERE like_users_id=#{userID}
+        AND like_tasks_id=#{taskID}
+    </delete>
+    <!--根据表单ID删除指派表中相应记录-->
+    <delete id="deleteTaskUsers">
+        DELETE FROM task_users
+        WHERE task_id=#{taskID}
     </delete>
 </mapper>
