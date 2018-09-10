@@ -88,16 +88,26 @@ public class TaskController {
     @TokenValid
     @PostMapping("/tasks/{id}/contents")
     public ResponseEntity addTaskContents(@PathVariable int id, @RequestBody AddContentRequest contentRequest, User user) {
-        Result result =taskService.addTaskContents(id,contentRequest,user);
+        Result result = taskService.addTaskContents(id, contentRequest, user);
         return ResponseEntity.ok(result);
     }
 
     //修改某个用户提交的某条内容
     @TokenValid
     @PutMapping("/tasks/{taskId}/contents/{contentId}")
-    public ResponseEntity updateTaskContents(@PathVariable int taskId,@PathVariable int contentId,
-                                             @RequestBody AddContentRequest contentRequest,User user){
-        Result result=taskService.updateTaskContents(taskId,contentId,contentRequest,user);
+    public ResponseEntity updateTaskContents(@PathVariable int taskId, @PathVariable int contentId,
+                                             @RequestBody AddContentRequest contentRequest, User user) {
+        Result result = taskService.updateTaskContents(taskId, contentId, contentRequest, user);
         return ResponseEntity.ok(result);
     }
+
+    //删除某个用户提交的某条内容
+    @TokenValid
+    @DeleteMapping("/tasks/{taskId}/contents/{contentId}")
+    public ResponseEntity deleteTaskContents(@PathVariable int taskId, @PathVariable int contentId,
+                                             User user) {
+        Result result = taskService.deleteTaskContents(taskId, contentId, user);
+        return ResponseEntity.ok(result);
+    }
+
 }

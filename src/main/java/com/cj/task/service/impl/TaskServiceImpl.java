@@ -234,13 +234,14 @@ public class TaskServiceImpl implements TaskService {
         return new Result.ResultBuilder().success("提交成功");
     }
 
+    //修改提交的表单内容
     public Result updateTaskContents(int taskId, int contentId, AddContentRequest contentRequest, User user) {
         Task task = taskMapper.taskInfo(taskId);
         Content content = contentMapper.findById(contentId);
         if (task == null || content == null) {
             return new Result.ResultBuilder().fail("表单或表单描述为空");
         }
-        if (user.equals(content.getUser())) {
+        if (!user.equals(content.getUser())) {
             return new Result.ResultBuilder().fail(HttpStatus.FORBIDDEN.value(), "用户无权限修改");
         }
         if (task.getDeadline().compareTo(new Date()) <= 0) {
@@ -270,12 +271,29 @@ public class TaskServiceImpl implements TaskService {
         contentMapper.update(content);
         for (AddContentRequest.ValuesBean bean : contentRequest.getValues()) {
             Field field = fieldMapper.findById(bean.getFieldId());
-            ContentItem contentItem=new ContentItem();
+            ContentItem contentItem = new ContentItem();
             contentItem.setValue(bean.getValue());
             contentItem.setField(field);
             contentItem.setContent(content);
             contentItemMapper.update(contentItem);
         }
         return new Result.ResultBuilder().success("修改用户提交内容成功");
+    }
+
+    //删除某个用户提交的某条内容
+    public Result deleteTaskContents(int taskId, int contentId, User user) {
+        Task task = taskMapper.taskInfo(taskId);
+        Content content = contentMapper.findById(contentId);
+        if (task == null || content == null) {
+            return new Result.ResultBuilder().fail("表单或表单描述为空");
+        }
+        if (!user.equals(content.getUser())) {
+            return new Result.ResultBuilder().fail(HttpStatus.FORBIDDEN.value(), "用户无权限修改");
+        }
+        contentMapper.delete(content);
+        ContentItem contentItem = new ContentItem();
+        contentItem.setContent(content);
+        contentItemMapper.delete(contentItem);
+        return new Result.ResultBuilder().success("删除用户提交内容成功");
     }
 }

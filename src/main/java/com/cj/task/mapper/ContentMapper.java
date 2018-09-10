@@ -12,4 +12,6 @@ public interface ContentMapper {
 
     int update(Content content);
 
+    int delete(Content content);
+
 }

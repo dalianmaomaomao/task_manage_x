@@ -27,4 +27,9 @@
         WHERE
         content_id=#{content.id} AND field_id=#{field.id}
     </update>
+    <!--根据表单概要ID删除表单详情-->
+    <delete id="delete" parameterType="com.cj.task.entity.ContentItem">
+        delete from content_item
+        where content_id= #{content.id}
+    </delete>
 </mapper>

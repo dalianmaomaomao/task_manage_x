@@ -29,5 +29,7 @@ public interface TaskService {
 
     Result addTaskContents(int id, AddContentRequest contentRequest, User user);
 
-    Result updateTaskContents(int taskId, int contentId, AddContentRequest contentRequest,User user);
+    Result updateTaskContents(int taskId, int contentId, AddContentRequest contentRequest, User user);
+
+    Result deleteTaskContents(int taskId, int contentId, User user);
 }

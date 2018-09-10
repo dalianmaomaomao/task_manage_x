@@ -6,6 +6,19 @@
         <result column="updated_at" property="updateAt" jdbcType="TIMESTAMP"/>
         <result column="state" property="state" jdbcType="BOOLEAN"/>
         <result column="msg" property="msg" jdbcType="VARCHAR"/>
+        <association property="user" javaType="com.cj.task.entity.User"/>
+        <association property="task" javaType="com.cj.task.entity.Task"/>
+    </resultMap>
+    <resultMap id="contentWithUserMap" type="com.cj.task.entity.Content"
+               extends="BaseResultMap">
+        <association property="user" javaType="com.cj.task.entity.User">
+            <id column="user_id" property="id" jdbcType="INTEGER"/>
+            <result column="user_account" property="account" jdbcType="VARCHAR"/>
+            <result column="user_pwd" property="pwd" jdbcType="VARCHAR"/>
+            <result column="user_nick_name" property="nickName" jdbcType="VARCHAR"/>
+            <result column="user_token" property="token" jdbcType="VARCHAR"/>
+            <result column="user_isadmin" property="isAdmin" jdbcType="VARCHAR"/>
+        </association>
     </resultMap>
     <sql id="Base_Column_List">
         id,updated_at,state,msg,task_id,user_id
@@ -19,11 +32,14 @@
         (#{updateAt},#{state},#{user.id},#{task.id})
     </insert>
     <!--根据content id查找表单概要-->
-    <select id="findById" resultMap="BaseResultMap">
+    <select id="findById" resultMap="contentWithUserMap">
         SELECT
-        <include refid="Base_Column_List"/>
-        FROM content
-        WHERE id=#{id}
+        con.id,con.updated_at,con.state,con.task_id,
+        u.id AS user_id,u.account AS user_account,u.pwd AS user_pwd,u.nick_name AS user_nick_name,
+        u.token AS user_token,u.isadmin AS user_isadmin
+        FROM content con LEFT JOIN user u
+        ON con.user_id=u.id
+        WHERE con.id=#{id}
     </select>
     <!--修改表单概要信息-->
     <update id="update" parameterType="com.cj.task.entity.Content">
@@ -34,5 +50,10 @@
         WHERE
         id=#{id}
     </update>
+    <!--根据ID删除表单概要-->
+    <delete id="delete" parameterType="com.cj.task.entity.Content">
+        delete from content
+        where id=#{id}
+    </delete>
 </mapper>
 

@@ -9,4 +9,6 @@ public interface ContentItemMapper {
     int save(ContentItem contentItem);
 
     int update(ContentItem contentItem);
+
+    int delete(ContentItem contentItem);
 }
