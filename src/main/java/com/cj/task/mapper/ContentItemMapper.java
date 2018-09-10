@@ -7,4 +7,6 @@ import com.cj.task.entity.ContentItem;
  */
 public interface ContentItemMapper {
     int save(ContentItem contentItem);
+
+    int update(ContentItem contentItem);
 }

@@ -10,4 +10,6 @@ public interface ContentMapper {
 
     Content findById(int id);
 
+    int update(Content content);
+
 }

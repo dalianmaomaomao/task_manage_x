@@ -18,4 +18,13 @@
         VALUES
         (#{value},#{content.id},#{field.id})
     </insert>
+    <!--修改表单详情信息-->
+    <update id="update" parameterType="com.cj.task.entity.ContentItem">
+        UPDATE
+        content_item
+        SET
+        value=#{value}
+        WHERE
+        content_id=#{content.id} AND field_id=#{field.id}
+    </update>
 </mapper>

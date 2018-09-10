@@ -198,6 +198,9 @@ public class TaskServiceImpl implements TaskService {
     //提交表单内容
     public Result addTaskContents(int id, AddContentRequest contentRequest, User user) {
         Task task = taskMapper.taskInfo(id);
+        if (task == null) {
+            return new Result.ResultBuilder().fail("表单不存在");
+        }
         Set<Field> fields = task.getFields();
         if (fields.size() != contentRequest.getValues().size()) {
             return new Result.ResultBuilder().fail("请完整提交");
@@ -230,7 +233,49 @@ public class TaskServiceImpl implements TaskService {
         }
         return new Result.ResultBuilder().success("提交成功");
     }
-//    public Result updateTaskContents(int taskId,int contentId,AddContentRequest contentRequest){
-//
-//    }
+
+    public Result updateTaskContents(int taskId, int contentId, AddContentRequest contentRequest, User user) {
+        Task task = taskMapper.taskInfo(taskId);
+        Content content = contentMapper.findById(contentId);
+        if (task == null || content == null) {
+            return new Result.ResultBuilder().fail("表单或表单描述为空");
+        }
+        if (user.equals(content.getUser())) {
+            return new Result.ResultBuilder().fail(HttpStatus.FORBIDDEN.value(), "用户无权限修改");
+        }
+        if (task.getDeadline().compareTo(new Date()) <= 0) {
+            return new Result.ResultBuilder().fail("超过截止时间，无法提交");
+        }
+        if (content.isState()) {
+            return new Result.ResultBuilder().fail("该内容已通过审核，无法修改");
+        }
+        for (AddContentRequest.ValuesBean bean : contentRequest.getValues()) {
+            int fieldId = bean.getFieldId();
+            if (fieldId <= 0) {
+                return new Result.ResultBuilder().fail("该字段不存在");
+            }
+            Field field = fieldMapper.findById(fieldId);
+            if (field == null || !task.getFields().contains(field)) {
+                return new Result.ResultBuilder().fail("该字段不存在");
+            }
+            if (StringUtils.isEmpty(bean.getValue())) {
+                return new Result.ResultBuilder().fail("输入的内容不能为空");
+            }
+            Config config = field.getConfig();
+            if (!RegexUtils.isMatch(config.getExpression(), bean.getValue())) {
+                return new Result.ResultBuilder().fail("您输入的内容不符合正则表达式规则");
+            }
+        }
+        content.setUpdateAt(new Date());
+        contentMapper.update(content);
+        for (AddContentRequest.ValuesBean bean : contentRequest.getValues()) {
+            Field field = fieldMapper.findById(bean.getFieldId());
+            ContentItem contentItem=new ContentItem();
+            contentItem.setValue(bean.getValue());
+            contentItem.setField(field);
+            contentItem.setContent(content);
+            contentItemMapper.update(contentItem);
+        }
+        return new Result.ResultBuilder().success("修改用户提交内容成功");
+    }
 }

@@ -8,7 +8,7 @@
         <result column="msg" property="msg" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id,update_at,state,msg,task_id,user_id
+        id,updated_at,state,msg,task_id,user_id
     </sql>
     <!--插入表单概要-->
     <insert id="save" parameterType="com.cj.task.entity.Content" useGeneratedKeys="true" keyProperty="id">
@@ -22,8 +22,17 @@
     <select id="findById" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM user
+        FROM content
         WHERE id=#{id}
     </select>
+    <!--修改表单概要信息-->
+    <update id="update" parameterType="com.cj.task.entity.Content">
+        UPDATE
+        content
+        SET
+        updated_at=#{updateAt}
+        WHERE
+        id=#{id}
+    </update>
 </mapper>
 

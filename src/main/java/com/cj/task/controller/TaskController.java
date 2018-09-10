@@ -92,12 +92,12 @@ public class TaskController {
         return ResponseEntity.ok(result);
     }
 
-//    //修改某个用户提交的某条内容
-//    @TokenValid
-//    @PutMapping("/tasks/{taskId}/contents/{contentId}")
-//    public ResponseEntity updateTaskContents(@PathVariable int taskId,@PathVariable int contentId,
-//                                             @RequestBody AddContentRequest contentRequest){
-//        Result result=taskService.updateTaskContents(taskId,contentId,contentRequest);
-//        return ResponseEntity.ok(result);
-//    }
+    //修改某个用户提交的某条内容
+    @TokenValid
+    @PutMapping("/tasks/{taskId}/contents/{contentId}")
+    public ResponseEntity updateTaskContents(@PathVariable int taskId,@PathVariable int contentId,
+                                             @RequestBody AddContentRequest contentRequest,User user){
+        Result result=taskService.updateTaskContents(taskId,contentId,contentRequest,user);
+        return ResponseEntity.ok(result);
+    }
 }
