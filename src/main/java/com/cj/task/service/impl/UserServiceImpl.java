@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService {
 
     public Result findUserByToken(String token) {
         User user = userMapper.findUserByToken(token);
-        return new Result.ResultBuilder().success("根据token在查找用户成功", UserResponse.wrap(user));
+        return new Result.ResultBuilder().success("根据token查找用户成功", UserResponse.wrap(user));
     }
 
     public Result updateUserinfo(String nickName, int id) {

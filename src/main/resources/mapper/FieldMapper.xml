@@ -8,6 +8,15 @@
         <association column="task_id" property="task" javaType="com.cj.task.entity.Task"/>
         <association column="config_id" property="config" javaType="com.cj.task.entity.Config"/>
     </resultMap>
+    <resultMap id="fieldWithConfig" type="com.cj.task.entity.Field"
+               extends="BaseResultMap">
+        <association property="config" javaType="com.cj.task.entity.Config">
+            <id column="config_id" property="id" jdbcType="INTEGER"/>
+            <result column="config_name" property="name" jdbcType="VARCHAR"/>
+            <result column="config_description" property="description" jdbcType="VARCHAR"/>
+            <result column="config_expression" property="expression" jdbcType="VARCHAR"/>
+        </association>
+    </resultMap>
     <sql id="Base_Column_List">
         id,name,description,task_id,config_id
     </sql>
@@ -39,4 +48,12 @@
         description=#{field.description}
         WHERE id=#{id}
     </update>
+    <!--根据字段ID查找-->
+    <select id="findById" resultMap="fieldWithConfig">
+        SELECT f.id,f.name,f.description,
+        c.id AS config_id,c.name AS config_name,c.description AS config_description,c.expression AS config_expression
+        FROM field f LEFT JOIN config c
+        ON f.config_id=c.id
+        WHERE f.id=#{id}
+    </select>
 </mapper>

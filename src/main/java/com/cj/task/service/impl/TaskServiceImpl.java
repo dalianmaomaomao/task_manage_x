@@ -1,15 +1,15 @@
 package com.cj.task.service.impl;
 
 import com.cj.task.entity.*;
+import com.cj.task.entity.request.AddContentRequest;
 import com.cj.task.entity.request.AddFieldRequest;
 import com.cj.task.entity.request.AddTaskRequest;
-import com.cj.task.mapper.ConfigMapper;
-import com.cj.task.mapper.FieldMapper;
-import com.cj.task.mapper.TaskMapper;
-import com.cj.task.mapper.UserMapper;
+import com.cj.task.mapper.*;
 import com.cj.task.service.TaskService;
+import com.cj.task.utils.RegexUtils;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -29,6 +29,10 @@ public class TaskServiceImpl implements TaskService {
     ConfigMapper configMapper;
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    ContentMapper contentMapper;
+    @Autowired
+    ContentItemMapper contentItemMapper;
 
     //创建表单
     public Result createTask(AddTaskRequest taskRequest) {
@@ -190,4 +194,43 @@ public class TaskServiceImpl implements TaskService {
         Set<Task> likeTasks = userLikeTasks.getLikeTasks();
         return new Result.ResultBuilder().success("获取收藏列表成功", likeTasks);
     }
+
+    //提交表单内容
+    public Result addTaskContents(int id, AddContentRequest contentRequest, User user) {
+        Task task = taskMapper.taskInfo(id);
+        Set<Field> fields = task.getFields();
+        if (fields.size() != contentRequest.getValues().size()) {
+            return new Result.ResultBuilder().fail("请完整提交");
+        }
+        for (AddContentRequest.ValuesBean bean : contentRequest.getValues()) {
+            int fieldId = bean.getFieldId();
+            Field field = fieldMapper.findById(fieldId);
+            Config config = field.getConfig();
+            System.out.println("config id: " + config);
+            if (!RegexUtils.isMatch(config.getExpression(), bean.getValue())) {
+                return new Result.ResultBuilder().fail("您输入的内容不符合正则表达式规则");
+            }
+        }
+
+        Content content = new Content();
+        content.setUpdateAt(new Date());
+        content.setState(false);
+        content.setUser(user);
+        content.setTask(task);
+        contentMapper.save(content);
+
+        for (AddContentRequest.ValuesBean bean : contentRequest.getValues()) {
+            int fieldId = bean.getFieldId();
+            Field field = fieldMapper.findById(fieldId);
+            ContentItem contentItem = new ContentItem();
+            contentItem.setValue(bean.getValue());
+            contentItem.setContent(content);
+            contentItem.setField(field);
+            contentItemMapper.save(contentItem);
+        }
+        return new Result.ResultBuilder().success("提交成功");
+    }
+//    public Result updateTaskContents(int taskId,int contentId,AddContentRequest contentRequest){
+//
+//    }
 }

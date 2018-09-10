@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.task.mapper.ContentItemMapper">
+    <resultMap id="BaseResultMap" type="com.cj.task.entity.ContentItem">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="value" property="value" jdbcType="VARCHAR"/>
+        <association property="content" javaType="com.cj.task.entity.Content"/>
+        <association property="field" javaType="com.cj.task.entity.Field"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,value
+    </sql>
+    <!--插入表单详情-->
+    <insert id="save" parameterType="com.cj.task.entity.ContentItem" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO
+        content_item
+        (value,content_id,field_id)
+        VALUES
+        (#{value},#{content.id},#{field.id})
+    </insert>
+</mapper>

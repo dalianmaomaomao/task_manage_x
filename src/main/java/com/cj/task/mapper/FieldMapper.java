@@ -16,4 +16,6 @@ public interface FieldMapper {
     int delete(int id);
 
     int updateFieldById(@Param("field") Field field, @Param("id") int id);
+
+    Field findById(int id);
 }

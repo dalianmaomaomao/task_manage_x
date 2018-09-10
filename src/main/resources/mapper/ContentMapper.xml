@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cj.task.mapper.ContentMapper">
+    <resultMap id="BaseResultMap" type="com.cj.task.entity.Content">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="updated_at" property="updateAt" jdbcType="TIMESTAMP"/>
+        <result column="state" property="state" jdbcType="BOOLEAN"/>
+        <result column="msg" property="msg" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,update_at,state,msg,task_id,user_id
+    </sql>
+    <!--插入表单概要-->
+    <insert id="save" parameterType="com.cj.task.entity.Content" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO
+        content
+        (updated_at,state,user_id,task_id)
+        VALUES
+        (#{updateAt},#{state},#{user.id},#{task.id})
+    </insert>
+    <!--根据content id查找表单概要-->
+    <select id="findById" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM user
+        WHERE id=#{id}
+    </select>
+</mapper>
+

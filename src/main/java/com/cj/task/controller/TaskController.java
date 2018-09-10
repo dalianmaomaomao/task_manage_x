@@ -4,6 +4,7 @@ import com.cj.task.annotation.AdminValid;
 import com.cj.task.annotation.TokenValid;
 import com.cj.task.entity.Result;
 import com.cj.task.entity.User;
+import com.cj.task.entity.request.AddContentRequest;
 import com.cj.task.entity.request.AddTaskRequest;
 import com.cj.task.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,7 +80,24 @@ public class TaskController {
     @TokenValid
     @GetMapping("tasks/likes")
     public ResponseEntity getAllLikeTasks(User user) {
-        Result result=taskService.getAllLikeTasks(user);
+        Result result = taskService.getAllLikeTasks(user);
         return ResponseEntity.ok(result);
     }
+
+    //提交表单内容
+    @TokenValid
+    @PostMapping("/tasks/{id}/contents")
+    public ResponseEntity addTaskContents(@PathVariable int id, @RequestBody AddContentRequest contentRequest, User user) {
+        Result result =taskService.addTaskContents(id,contentRequest,user);
+        return ResponseEntity.ok(result);
+    }
+
+//    //修改某个用户提交的某条内容
+//    @TokenValid
+//    @PutMapping("/tasks/{taskId}/contents/{contentId}")
+//    public ResponseEntity updateTaskContents(@PathVariable int taskId,@PathVariable int contentId,
+//                                             @RequestBody AddContentRequest contentRequest){
+//        Result result=taskService.updateTaskContents(taskId,contentId,contentRequest);
+//        return ResponseEntity.ok(result);
+//    }
 }

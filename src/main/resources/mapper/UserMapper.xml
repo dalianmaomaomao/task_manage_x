@@ -9,7 +9,7 @@
         <result column="token" property="token" jdbcType="VARCHAR"/>
         <result column="isadmin" property="isAdmin" jdbcType="BOOLEAN"/>
     </resultMap>
-    <resultMap id="userLikeTaskMap" type="com.cj.task.entity.Task"
+    <resultMap id="userLikeTaskMap" type="com.cj.task.entity.User"
                extends="BaseResultMap">
         <collection property="likeTasks" ofType="com.cj.task.entity.Task">
             <id column="task_id" property="id" jdbcType="INTEGER"/>
