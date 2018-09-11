@@ -217,7 +217,7 @@ public class TaskServiceImpl implements TaskService {
 
         Content content = new Content();
         content.setUpdateAt(new Date());
-        content.setState(false);
+        content.setState(0);
         content.setUser(user);
         content.setTask(task);
         contentMapper.save(content);
@@ -247,7 +247,7 @@ public class TaskServiceImpl implements TaskService {
         if (task.getDeadline().compareTo(new Date()) <= 0) {
             return new Result.ResultBuilder().fail("超过截止时间，无法提交");
         }
-        if (content.isState()) {
+        if (content.getState() != 0) {
             return new Result.ResultBuilder().fail("该内容已通过审核，无法修改");
         }
         for (AddContentRequest.ValuesBean bean : contentRequest.getValues()) {

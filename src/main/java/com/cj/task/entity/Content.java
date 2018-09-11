@@ -9,7 +9,7 @@ import java.util.Set;
 public class Content {
     private int id;
     private Date updateAt;
-    private boolean state;
+    private int state;
     private String msg;
     private User user;
     private Task task;
@@ -30,11 +30,11 @@ public class Content {
         this.updateAt = updateAt;
     }
 
-    public boolean isState() {
+    public int getState() {
         return state;
     }
 
-    public void setState(boolean state) {
+    public void setState(int state) {
         this.state = state;
     }
 

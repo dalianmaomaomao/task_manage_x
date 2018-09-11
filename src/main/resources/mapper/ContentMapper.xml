@@ -4,7 +4,7 @@
     <resultMap id="BaseResultMap" type="com.cj.task.entity.Content">
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="updated_at" property="updateAt" jdbcType="TIMESTAMP"/>
-        <result column="state" property="state" jdbcType="BOOLEAN"/>
+        <result column="state" property="state" jdbcType="INTEGER"/>
         <result column="msg" property="msg" jdbcType="VARCHAR"/>
         <association property="user" javaType="com.cj.task.entity.User"/>
         <association property="task" javaType="com.cj.task.entity.Task"/>
@@ -55,5 +55,14 @@
         delete from content
         where id=#{id}
     </delete>
+    <!--审核表单-->
+    <update id="updateState" parameterType="com.cj.task.entity.Content">
+        UPDATE
+        content
+        SET
+        state=#{state}
+        WHERE
+        id=#{id}
+    </update>
 </mapper>
 

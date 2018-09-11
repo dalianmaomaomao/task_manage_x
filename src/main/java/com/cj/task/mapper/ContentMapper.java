@@ -1,6 +1,7 @@
 package com.cj.task.mapper;
 
 import com.cj.task.entity.Content;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * Created by cj on 2018/9/9.
@@ -13,5 +14,7 @@ public interface ContentMapper {
     int update(Content content);
 
     int delete(Content content);
+
+    int updateState(Content content);
 
 }
