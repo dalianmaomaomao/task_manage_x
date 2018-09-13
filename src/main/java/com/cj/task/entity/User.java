@@ -86,4 +86,5 @@ public class User {
     public void setLikeTasks(Set<Task> likeTasks) {
         this.likeTasks = likeTasks;
     }
+
 }

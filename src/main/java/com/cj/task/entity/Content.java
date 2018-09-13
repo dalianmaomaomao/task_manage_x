@@ -14,6 +14,16 @@ public class Content {
     private User user;
     private Task task;
 
+    public String getStateStr(int state) {
+        String stateStr = "未审核";
+        if (state == -1) {
+            stateStr = "未通过审核";
+        } else {
+            stateStr = "通过审核";
+        }
+        return stateStr;
+    }
+
     public int getId() {
         return id;
     }

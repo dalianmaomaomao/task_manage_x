@@ -7,6 +7,14 @@
         <association property="content" javaType="com.cj.task.entity.Content"/>
         <association property="field" javaType="com.cj.task.entity.Field"/>
     </resultMap>
+    <resultMap id="contentItemWithFieldMap" type="com.cj.task.entity.ContentItem"
+               extends="BaseResultMap">
+        <association property="field" javaType="com.cj.task.entity.Field">
+            <id column="field_id" property="id" jdbcType="INTEGER"/>
+            <result column="field_name" property="name" jdbcType="VARCHAR"/>
+            <result column="field_description" property="description" jdbcType="VARCHAR"/>
+        </association>
+    </resultMap>
     <sql id="Base_Column_List">
         id,value
     </sql>
@@ -32,4 +40,13 @@
         delete from content_item
         where content_id= #{content.id}
     </delete>
+    <!--根据表单概要ID查找表单详情-->
+    <select id="findContentItems" resultMap="contentItemWithFieldMap">
+        SELECT
+        ci.id,ci.value,
+        f.id AS field_id,f.name AS field_name,f.description AS field_description
+        FROM content_item ci LEFT JOIN field f
+        ON ci.field_id=f.id
+        WHERE content_id=#{conId}
+    </select>
 </mapper>

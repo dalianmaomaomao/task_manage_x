@@ -14,6 +14,7 @@ public class Task {
     private Date deadline;
     private Set<User> users;
     private Set<Field> fields;
+    private Set<Content> contents;
 
     public int getId() {
         return id;
@@ -69,5 +70,13 @@ public class Task {
 
     public void setFields(Set<Field> fields) {
         this.fields = fields;
+    }
+
+    public Set<Content> getContents() {
+        return contents;
+    }
+
+    public void setContents(Set<Content> contents) {
+        this.contents = contents;
     }
 }

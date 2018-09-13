@@ -23,4 +23,11 @@ public class ContentController {
         Result result = contentService.verifyContent(cid, pass);
         return ResponseEntity.ok(result);
     }
+
+    //管理员导出表单数据
+    @AdminValid
+    @GetMapping("/tasks/{tid}/contents/export")
+    public ResponseEntity exportContents(@PathVariable int tid){
+       return contentService.exportTaskContents(tid);
+    }
 }

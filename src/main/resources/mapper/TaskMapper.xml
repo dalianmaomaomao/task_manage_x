@@ -9,6 +9,7 @@
         <result column="deadline" property="deadline" jdbcType="TIMESTAMP"/>
         <collection property="users" ofType="com.cj.task.entity.User"/>
         <collection property="fields" ofType="com.cj.task.entity.Field"/>
+        <collection property="contents" ofType="com.cj.task.entity.Content"/>
     </resultMap>
     <resultMap id="taskWithFieldsMap" type="com.cj.task.entity.Task"
                extends="BaseResultMap">
@@ -29,6 +30,15 @@
             <result column="user_isadmin" property="isAdmin" jdbcType="VARCHAR"/>
         </collection>
     </resultMap>
+    <resultMap id="taskWithFieldsContentsMap" type="com.cj.task.entity.Task"
+               extends="taskWithFieldsMap">
+        <collection property="contents" ofType="com.cj.task.entity.Content">
+            <id column="content_id" property="id" jdbcType="INTEGER"/>
+            <result column="content_updated_at" property="updateAt" jdbcType="TIMESTAMP"/>
+            <result column="content_state" property="state" jdbcType="INTEGER"/>
+            <result column="content_msg" property="msg" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
     <sql id="Base_Column_List">
             id,title,description,publish_time,deadline
         </sql>
@@ -47,16 +57,19 @@
         FROM task
     </select>
     <!--获取表单详情-->
-    <select id="taskInfo" resultMap="taskWithFieldsUsersMap">
+    <select id="taskInfo" resultMap="taskWithFieldsContentsMap">
         SELECT t.id,t.title,t.description,t.publish_time,t.deadline,
         u.id AS user_id,u.account AS user_account,u.nick_name AS user_nick_name,u.isadmin AS user_isadmin,
-        f.id AS field_id,f.name AS field_name,f.description AS field_description
+        f.id AS field_id,f.name AS field_name,f.description AS field_description,
+        con.id AS content_id,con.updated_at AS content_updated_at,con.state AS content_state,con.msg AS content_msg
         FROM task t LEFT JOIN task_users tu
         ON t.id=tu.task_id
         LEFT JOIN user u
         ON u.id=tu.user_id
         LEFT JOIN field f
         ON t.id=f.task_id
+        LEFT JOIN content con
+        ON t.id=con.task_id
         WHERE t.id=#{id}
     </select>
     <!--修改表单-->
